@@ -1,0 +1,1 @@
+{"name":"Local: subarraywith0sum","url":"/Users/divyanshisinghbora/Documents/DSA-code_on_every_line/array/subarraywith0sum.cpp","tests":[{"id":1685518726423,"input":"5\n4 2 -3 1 6","output":"Yes"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/Users/divyanshisinghbora/Documents/DSA-code_on_every_line/array/subarraywith0sum.cpp","group":"local","local":true}
