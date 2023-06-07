@@ -1,0 +1,1 @@
+{"name":"Local: validshuffle","url":"/Users/divyanshisinghbora/Documents/DSA-code_on_every_line/string/validshuffle.cpp","tests":[{"id":1685666621054,"input":"abcdf\nbcdat","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/Users/divyanshisinghbora/Documents/DSA-code_on_every_line/string/validshuffle.cpp","group":"local","local":true}
