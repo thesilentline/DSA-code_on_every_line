@@ -1,7 +1,7 @@
 //~ author      : DSB
 #include<bits/stdc++.h>
-#include<vector>
 #include<iostream>
+#include<queue>
 using namespace std;
  
  
@@ -63,51 +63,26 @@ void inorderTraversal(Node* root)
     inorderTraversal(root->right);
 }
 
-void leftside(Node* root,vector<int> &ans)
+int sum(Node *root)
 {
-    if(root==NULL or (root->left==NULL and root->right==NULL))
-    return;
-    ans.push_back(root->data);
-    if(root->left)
-    leftside(root->left,ans);
-    else
-    leftside(root->right,ans);
+    if (root == NULL)
+        return 0;
+    
+    return sum(root->left) + root->data + sum(root->right);
 }
 
-void rightside(Node* root,vector<int> &ans)
-{
-    if(root==NULL or (root->left==NULL and root->right==NULL))
-    return;
-    if(root->right)
-    rightside(root->right,ans);
-    else
-    rightside(root->left,ans);
-    ans.push_back(root->data);
-}
-
-void leafnode(Node* root,vector<int> &ans)
+bool sumtree(Node* root)
 {
     if(root==NULL)
-    return;
-
+    return true;
     if(root->left==NULL and root->right==NULL)
-    {
-        ans.push_back(root->data);
-        return;
-    }
-    leafnode(root->left,ans);
-    leafnode(root->right,ans);
-}
-
-vector<int> boundary(Node* root)
-{
-    vector<int> ans;
-    if(root==NULL)
-    return ans;
-    leftside(root,ans);
-    leafnode(root,ans);
-    rightside(root->right,ans);
-    return ans;    
+    return true;
+    bool left= sumtree(root->left);
+    bool right= sumtree(root->right);
+    if((sum(root->left)+sum(root->right))==root->data and left and right)
+    return true;
+    else
+    return false;
 }
 
 int main() 
@@ -124,11 +99,10 @@ int main()
     
     inorderTraversal(root);
     cout<<endl;
-    vector<int> temp;
-    temp= boundary(root);
-
-    printvector(temp,temp.size());
-
+    if(sumtree(root))
+    cout<<"YES"<<endl;
+    else
+    cout<<"NO"<<endl;
     
     return 0;
 }

@@ -1,7 +1,7 @@
 //~ author      : DSB
 #include<bits/stdc++.h>
-#include<vector>
 #include<iostream>
+#include<queue>
 using namespace std;
  
  
@@ -63,72 +63,45 @@ void inorderTraversal(Node* root)
     inorderTraversal(root->right);
 }
 
-void leftside(Node* root,vector<int> &ans)
-{
-    if(root==NULL or (root->left==NULL and root->right==NULL))
-    return;
-    ans.push_back(root->data);
-    if(root->left)
-    leftside(root->left,ans);
-    else
-    leftside(root->right,ans);
-}
-
-void rightside(Node* root,vector<int> &ans)
-{
-    if(root==NULL or (root->left==NULL and root->right==NULL))
-    return;
-    if(root->right)
-    rightside(root->right,ans);
-    else
-    rightside(root->left,ans);
-    ans.push_back(root->data);
-}
-
-void leafnode(Node* root,vector<int> &ans)
+void sumequalk(Node* root, vector<int> &temp,int k)
 {
     if(root==NULL)
     return;
-
-    if(root->left==NULL and root->right==NULL)
+    temp.push_back(root->data);
+    sumequalk(root->left,temp,k);
+    sumequalk(root->right,temp,k);
+    int f=0;
+    for(int i= temp.size()-1;i>=0;i--)
     {
-        ans.push_back(root->data);
-        return;
+        f+=temp[i];
+        if(k==f)
+        {
+            for(int j=i;j<temp.size();j++)
+            cout<<temp[j]<<" ";
+            cout<<endl;
+        }
     }
-    leafnode(root->left,ans);
-    leafnode(root->right,ans);
-}
-
-vector<int> boundary(Node* root)
-{
-    vector<int> ans;
-    if(root==NULL)
-    return ans;
-    leftside(root,ans);
-    leafnode(root,ans);
-    rightside(root->right,ans);
-    return ans;    
+    temp.pop_back();    
 }
 
 int main() 
 {
-    Node* root = NULL;
-    int n;
-    cin>>n;
-    for(int i=0;i<n;i++)
-    {
-        int k=0;
-        cin>>k;
-        root= insertNode(root,k);
-    }
-    
+    int k = 5;
+    Node* root = new Node(1);
+    root->left = new Node(3);
+    root->left->left = new Node(2);
+    root->left->right = new Node(1);
+    root->left->right->left = new Node(1);
+    root->right = new Node(-1);
+    root->right->left = new Node(4);
+    root->right->left->left = new Node(1);
+    root->right->left->right = new Node(2);
+    root->right->right = new Node(5);
+    root->right->right->right = new Node(6);
     inorderTraversal(root);
     cout<<endl;
     vector<int> temp;
-    temp= boundary(root);
-
-    printvector(temp,temp.size());
-
+    sumequalk(root,temp,k);
     
     return 0;
 }

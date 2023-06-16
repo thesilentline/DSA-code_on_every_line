@@ -1,7 +1,8 @@
 //~ author      : DSB
 #include<bits/stdc++.h>
-#include<vector>
 #include<iostream>
+#include<queue>
+#include<map>
 using namespace std;
  
  
@@ -63,51 +64,30 @@ void inorderTraversal(Node* root)
     inorderTraversal(root->right);
 }
 
-void leftside(Node* root,vector<int> &ans)
+bool checklevel(Node* root)
 {
-    if(root==NULL or (root->left==NULL and root->right==NULL))
-    return;
-    ans.push_back(root->data);
-    if(root->left)
-    leftside(root->left,ans);
-    else
-    leftside(root->right,ans);
-}
-
-void rightside(Node* root,vector<int> &ans)
-{
-    if(root==NULL or (root->left==NULL and root->right==NULL))
-    return;
-    if(root->right)
-    rightside(root->right,ans);
-    else
-    rightside(root->left,ans);
-    ans.push_back(root->data);
-}
-
-void leafnode(Node* root,vector<int> &ans)
-{
+    map<int,vector<int> > m;
+    queue<pair<Node*, int> > q;
     if(root==NULL)
-    return;
-
-    if(root->left==NULL and root->right==NULL)
+    return true;
+    q.push(make_pair(root,0));
+    while(!q.empty())
     {
-        ans.push_back(root->data);
-        return;
+        pair<Node*, int> temp= q.front();
+        q.pop();
+        int hd= temp.second;
+        Node* node= temp.first;
+        if(node->left==NULL and node->right==NULL)
+        m[hd].push_back(node->data);
+        if(node->left)
+        q.push(make_pair(node->left,hd+1));
+        if(node->right)
+        q.push(make_pair(node->right,hd+1));
     }
-    leafnode(root->left,ans);
-    leafnode(root->right,ans);
-}
-
-vector<int> boundary(Node* root)
-{
-    vector<int> ans;
-    if(root==NULL)
-    return ans;
-    leftside(root,ans);
-    leafnode(root,ans);
-    rightside(root->right,ans);
-    return ans;    
+    if(m.size()==1)
+    return true;
+    else
+    return false;
 }
 
 int main() 
@@ -124,11 +104,9 @@ int main()
     
     inorderTraversal(root);
     cout<<endl;
-    vector<int> temp;
-    temp= boundary(root);
-
-    printvector(temp,temp.size());
-
-    
+    if(checklevel(root))
+    cout<<"YES"<<endl;
+    else
+    cout<<"NO"<<endl;
     return 0;
 }

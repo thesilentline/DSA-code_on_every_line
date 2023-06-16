@@ -1,7 +1,7 @@
 //~ author      : DSB
 #include<bits/stdc++.h>
-#include<vector>
 #include<iostream>
+#include<queue>
 using namespace std;
  
  
@@ -63,72 +63,46 @@ void inorderTraversal(Node* root)
     inorderTraversal(root->right);
 }
 
-void leftside(Node* root,vector<int> &ans)
-{
-    if(root==NULL or (root->left==NULL and root->right==NULL))
-    return;
-    ans.push_back(root->data);
-    if(root->left)
-    leftside(root->left,ans);
-    else
-    leftside(root->right,ans);
-}
-
-void rightside(Node* root,vector<int> &ans)
-{
-    if(root==NULL or (root->left==NULL and root->right==NULL))
-    return;
-    if(root->right)
-    rightside(root->right,ans);
-    else
-    rightside(root->left,ans);
-    ans.push_back(root->data);
-}
-
-void leafnode(Node* root,vector<int> &ans)
+pair<int,int> longestbloodline(Node *root)
 {
     if(root==NULL)
-    return;
-
-    if(root->left==NULL and root->right==NULL)
     {
-        ans.push_back(root->data);
-        return;
+        return make_pair(0,0);
     }
-    leafnode(root->left,ans);
-    leafnode(root->right,ans);
-}
 
-vector<int> boundary(Node* root)
-{
-    vector<int> ans;
-    if(root==NULL)
-    return ans;
-    leftside(root,ans);
-    leafnode(root,ans);
-    rightside(root->right,ans);
-    return ans;    
+    pair<int,int> left= longestbloodline(root->left);
+    pair<int,int> right= longestbloodline(root->right);
+    if(left.second>right.second)
+    return make_pair(left.first+root->data,left.second+1);
+    else
+    return make_pair(right.first+root->data,right.second+1);
 }
 
 int main() 
 {
-    Node* root = NULL;
-    int n;
-    cin>>n;
-    for(int i=0;i<n;i++)
-    {
-        int k=0;
-        cin>>k;
-        root= insertNode(root,k);
-    }
+    // Node* root = NULL;
+    // int n;
+    // cin>>n;
+    // for(int i=0;i<n;i++)
+    // {
+    //     int k=0;
+    //     cin>>k;
+    //     root= insertNode(root,k);
+    // }
     
+    Node *root = new Node(4);
+    root->left = new Node(2);
+    root->right = new Node(5);
+    root->left->left = new Node(7);
+    root->left->right = new Node(1);
+    root->right->left = new Node(2);
+    root->right->right = new Node(3);
+    root->left->right->left= new Node(6);
+
     inorderTraversal(root);
     cout<<endl;
-    vector<int> temp;
-    temp= boundary(root);
-
-    printvector(temp,temp.size());
-
+    pair<int,int> temp= longestbloodline(root);
+    cout<<temp.first<<endl;
     
     return 0;
 }
