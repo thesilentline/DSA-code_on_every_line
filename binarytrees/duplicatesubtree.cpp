@@ -2,6 +2,7 @@
 #include<bits/stdc++.h>
 #include<iostream>
 #include<queue>
+#include<unordered_map>
 using namespace std;
  
  
@@ -62,42 +63,46 @@ void inorderTraversal(Node* root)
     cout << root->data << " ";
     inorderTraversal(root->right);
 }
-
-Node* leastcommon(Node* root,int n1,int n2)
+unordered_map<string,int> m;
+string duplicate(Node* root)
 {
     if(root==NULL)
-    return NULL;
-    if(root->data==n1 or root->data==n2)
-    return root;
-    Node* left=leastcommon(root->left,n1,n2);
-    Node* right=leastcommon(root->right,n1,n2);
-    if(left and right)
-    return root;
-    if(left)
-    return left;
-    else
-    return right;
+    return " ";
+    string s="";
+    if(root->left==NULL and root->right==NULL)
+    {
+        s= to_string(root->data);
+        return s;
+    }
+    s = to_string(root->data)+" "+s;
+    s = duplicate(root->left)+" "+s;
+    s = duplicate(root->right)+" "+s;
+    m[s]++;
+    return s;
 }
 
 int main() 
 {
-    Node* root = new Node(1);
+    Node* root = NULL;
+    root = new Node(1);
     root->left = new Node(2);
     root->right = new Node(3);
     root->left->left = new Node(4);
-    root->left->right = new Node(5);
-    root->right->left = new Node(6);
-    root->right->right = new Node(7);
+    root->right->left = new Node(2);
+    root->right->left->left = new Node(4);
+    root->right->right = new Node(4);
     
     inorderTraversal(root);
     cout<<endl;
 
-    // cout << "LCA(4, 5) = " << findLCA(root, 4, 5);
-    // cout << "\nLCA(4, 6) = " << findLCA(root, 4, 6);
-    // cout << "\nLCA(3, 4) = " << findLCA(root, 3, 4);
-    // cout << "\nLCA(2, 4) = " << findLCA(root, 2, 4);
-    Node* temp= leastcommon(root,4,2);
-    cout<<temp->data<<endl;
+    duplicate(root);
+    for(auto i:m)
+    {
+        if(i.second>=2)
+        {
+            cout<<i.first<<endl;
+        }
+    }
     
     return 0;
 }

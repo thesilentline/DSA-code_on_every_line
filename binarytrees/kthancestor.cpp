@@ -63,41 +63,44 @@ void inorderTraversal(Node* root)
     inorderTraversal(root->right);
 }
 
-Node* leastcommon(Node* root,int n1,int n2)
+Node* kthancestor(Node* root,int &val, int &k)
 {
     if(root==NULL)
     return NULL;
-    if(root->data==n1 or root->data==n2)
-    return root;
-    Node* left=leastcommon(root->left,n1,n2);
-    Node* right=leastcommon(root->right,n1,n2);
-    if(left and right)
-    return root;
-    if(left)
-    return left;
-    else
-    return right;
+    Node* rv=NULL;
+    
+    if(root->data==val or kthancestor(root->left,val,k) or kthancestor(root->right,val,k))
+    {
+        if(k==0)
+        {
+            cout<<root->data<<endl;
+            return NULL;
+        }
+        k--;
+        return rv?rv:root;
+    }
+    return NULL;
 }
 
 int main() 
 {
-    Node* root = new Node(1);
+    Node *root = new Node(1);
     root->left = new Node(2);
     root->right = new Node(3);
     root->left->left = new Node(4);
     root->left->right = new Node(5);
-    root->right->left = new Node(6);
-    root->right->right = new Node(7);
-    
+ 
+    int k = 2;
+    int node = 5;
+ 
     inorderTraversal(root);
     cout<<endl;
 
-    // cout << "LCA(4, 5) = " << findLCA(root, 4, 5);
-    // cout << "\nLCA(4, 6) = " << findLCA(root, 4, 6);
-    // cout << "\nLCA(3, 4) = " << findLCA(root, 3, 4);
-    // cout << "\nLCA(2, 4) = " << findLCA(root, 2, 4);
-    Node* temp= leastcommon(root,4,2);
-    cout<<temp->data<<endl;
+    Node* parent = kthancestor(root,node,k);
+     
+    if (parent)
+        cout << "-1";
+    
     
     return 0;
 }

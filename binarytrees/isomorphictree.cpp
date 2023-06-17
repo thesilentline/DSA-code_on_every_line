@@ -63,41 +63,45 @@ void inorderTraversal(Node* root)
     inorderTraversal(root->right);
 }
 
-Node* leastcommon(Node* root,int n1,int n2)
+bool isomorphic(Node* root1, Node* root2)
 {
-    if(root==NULL)
-    return NULL;
-    if(root->data==n1 or root->data==n2)
-    return root;
-    Node* left=leastcommon(root->left,n1,n2);
-    Node* right=leastcommon(root->right,n1,n2);
-    if(left and right)
-    return root;
-    if(left)
-    return left;
-    else
-    return right;
+    if(root1== NULL and root2==NULL)
+    return true;
+    if(root1==NULL or root2==NULL)
+    return false;
+    if(root1->data != root2->data)
+    return false;
+    bool a= isomorphic(root1->left,root2->left) and isomorphic(root1->right,root2->right);
+    bool b= isomorphic(root1->left, root2->right) and isomorphic(root1->right,root2->left);
+    return a or b;
 }
 
 int main() 
 {
-    Node* root = new Node(1);
-    root->left = new Node(2);
-    root->right = new Node(3);
-    root->left->left = new Node(4);
-    root->left->right = new Node(5);
-    root->right->left = new Node(6);
-    root->right->right = new Node(7);
+    struct Node *n1 = new Node(1);
+    n1->left        = new Node(2);
+    n1->right       = new Node(3);
+    n1->left->left  = new Node(4);
+    n1->left->right = new Node(5);
+    n1->right->left  = new Node(6);
+    n1->left->right->left = new Node(7);
+    n1->left->right->right = new Node(8);
+ 
+    struct Node *n2 = new Node(1);
+    n2->left         = new Node(3);
+    n2->right        = new Node(2);
+    n2->right->left   = new Node(4);
+    n2->right->right   = new Node(5);
+    n2->left->right   = new Node(6);
+    n2->right->right->left = new Node(8);
+    n2->right->right->right = new Node(7);
     
-    inorderTraversal(root);
+    inorderTraversal(n1);
+    cout<<endl;
+    inorderTraversal(n2);
     cout<<endl;
 
-    // cout << "LCA(4, 5) = " << findLCA(root, 4, 5);
-    // cout << "\nLCA(4, 6) = " << findLCA(root, 4, 6);
-    // cout << "\nLCA(3, 4) = " << findLCA(root, 3, 4);
-    // cout << "\nLCA(2, 4) = " << findLCA(root, 2, 4);
-    Node* temp= leastcommon(root,4,2);
-    cout<<temp->data<<endl;
+    cout<<isomorphic(n1,n2)<<endl;
     
     return 0;
 }

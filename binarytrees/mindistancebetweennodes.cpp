@@ -79,6 +79,20 @@ Node* leastcommon(Node* root,int n1,int n2)
     return right;
 }
 
+int distance(Node* root, int value)
+{
+    if(root==NULL)
+    return 0;
+    if(root->data==value)
+    return 1;
+    int left= distance(root->left,value);
+    int right= distance(root->right,value);
+    if(!left and !right)
+    return 0;
+    else
+    return left+right+1;
+}
+
 int main() 
 {
     Node* root = new Node(1);
@@ -88,6 +102,7 @@ int main()
     root->left->right = new Node(5);
     root->right->left = new Node(6);
     root->right->right = new Node(7);
+    root->right->left->right = new Node(8);
     
     inorderTraversal(root);
     cout<<endl;
@@ -96,8 +111,12 @@ int main()
     // cout << "\nLCA(4, 6) = " << findLCA(root, 4, 6);
     // cout << "\nLCA(3, 4) = " << findLCA(root, 3, 4);
     // cout << "\nLCA(2, 4) = " << findLCA(root, 2, 4);
-    Node* temp= leastcommon(root,4,2);
-    cout<<temp->data<<endl;
+    int a=5;
+    int b=8;
+    Node* temp= leastcommon(root,a,b);
+    int A=distance(temp,a);
+    int B=distance(temp,b);
+    cout<<A+B-2<<endl;
     
     return 0;
 }

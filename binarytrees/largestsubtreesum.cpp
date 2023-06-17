@@ -63,41 +63,32 @@ void inorderTraversal(Node* root)
     inorderTraversal(root->right);
 }
 
-Node* leastcommon(Node* root,int n1,int n2)
+int sum(Node* root,int &max)
 {
     if(root==NULL)
-    return NULL;
-    if(root->data==n1 or root->data==n2)
-    return root;
-    Node* left=leastcommon(root->left,n1,n2);
-    Node* right=leastcommon(root->right,n1,n2);
-    if(left and right)
-    return root;
-    if(left)
-    return left;
-    else
-    return right;
+    return 0;
+    int left= sum(root->left,max);
+    int right=sum(root->right,max);
+    int temp= root->data+ left+ right;
+    if(max<temp)
+    max=temp;
+    return temp;
 }
 
 int main() 
 {
     Node* root = new Node(1);
-    root->left = new Node(2);
+    root->left = new Node(-2);
     root->right = new Node(3);
     root->left->left = new Node(4);
     root->left->right = new Node(5);
-    root->right->left = new Node(6);
-    root->right->right = new Node(7);
-    
+    root->right->left = new Node(-6);
+    root->right->right = new Node(2);
+    int max= INT_MIN;
     inorderTraversal(root);
     cout<<endl;
+    sum(root,max);
+    cout<<max<<endl;
 
-    // cout << "LCA(4, 5) = " << findLCA(root, 4, 5);
-    // cout << "\nLCA(4, 6) = " << findLCA(root, 4, 6);
-    // cout << "\nLCA(3, 4) = " << findLCA(root, 3, 4);
-    // cout << "\nLCA(2, 4) = " << findLCA(root, 2, 4);
-    Node* temp= leastcommon(root,4,2);
-    cout<<temp->data<<endl;
-    
     return 0;
 }
