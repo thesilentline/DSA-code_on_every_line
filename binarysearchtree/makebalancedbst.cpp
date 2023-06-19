@@ -53,28 +53,30 @@ Node* insertNode(Node* root, int value)
     return root;
 }
 
-void inorderTraversal(Node* root) 
+void inorderTraversal(Node* root,vector<int> &v) 
 {
     if (root == NULL) 
         return;
     
-    inorderTraversal(root->left);
+    inorderTraversal(root->left,v);
     cout << root->data << " ";
-    inorderTraversal(root->right);
+    v.push_back(root->data);
+    inorderTraversal(root->right,v);
 }
 
-void inordersucc(Node* root,Node* &prev)
+Node* balanced(int b, int e,vector<int> v)
 {
-    if(root==NULL)
-    return;
-    inordersucc(root->left,prev);
-    if(prev!=NULL)
-    {
-        cout<<prev->data<<"->"<<root->data<<endl;
-    }
-    prev=root;
-    inordersucc(root->right,prev);
+    if(b>e)
+    return NULL;
+
+    int mid= (b+e)/2;
+    Node* temp= new Node(v[mid]);
+    temp->left=balanced(b,mid-1,v);
+    temp->right=(balanced(mid+1,e,v));
+    return temp;
+
 }
+
 
 int main() 
 {
@@ -88,12 +90,12 @@ int main()
         root= insertNode(root,k);
     }
     
-    inorderTraversal(root);
+    vector<int> v;
+    inorderTraversal(root,v);
     cout<<endl;
-
-    Node* prev=NULL;
-    inordersucc(root,prev);
-    cout<<prev->data<<"->-1"<<endl;
+    Node* temp=NULL;
+    temp=balanced(0,v.size()-1,v);
+    inorderTraversal(temp,v);
     
     return 0;
 }

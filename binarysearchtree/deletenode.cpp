@@ -63,18 +63,7 @@ void inorderTraversal(Node* root)
     inorderTraversal(root->right);
 }
 
-void inordersucc(Node* root,Node* &prev)
-{
-    if(root==NULL)
-    return;
-    inordersucc(root->left,prev);
-    if(prev!=NULL)
-    {
-        cout<<prev->data<<"->"<<root->data<<endl;
-    }
-    prev=root;
-    inordersucc(root->right,prev);
-}
+
 
 int main() 
 {
@@ -90,10 +79,6 @@ int main()
     
     inorderTraversal(root);
     cout<<endl;
-
-    Node* prev=NULL;
-    inordersucc(root,prev);
-    cout<<prev->data<<"->-1"<<endl;
     
     return 0;
 }

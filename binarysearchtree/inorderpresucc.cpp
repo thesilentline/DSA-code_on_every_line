@@ -63,18 +63,49 @@ void inorderTraversal(Node* root)
     inorderTraversal(root->right);
 }
 
-void inordersucc(Node* root,Node* &prev)
+Node* previous(Node* root)
+{
+    Node* temp= root->left;
+    while(temp->right)
+    {
+        temp=temp->right;
+    }
+    return temp;
+}
+
+Node* successor(Node* root)
+{
+    Node* temp= root->right;
+    while(temp->left)
+    {
+        temp=temp->left;
+    }
+    return temp;
+}
+
+void solve(Node* root, Node* &prev, Node* &suc,int key)
 {
     if(root==NULL)
     return;
-    inordersucc(root->left,prev);
-    if(prev!=NULL)
+    if(root->data==key)
     {
-        cout<<prev->data<<"->"<<root->data<<endl;
+        if(root->left)
+        prev=previous(root);
+        if(root->right)
+        suc=successor(root);
     }
-    prev=root;
-    inordersucc(root->right,prev);
+    else if(key>root->data)
+    {
+        prev=root;
+        solve(root->right,prev,suc,key);
+    }
+    else
+    {
+        suc=root;
+        solve(root->left,prev,suc,key);
+    }
 }
+
 
 int main() 
 {
@@ -92,8 +123,10 @@ int main()
     cout<<endl;
 
     Node* prev=NULL;
-    inordersucc(root,prev);
-    cout<<prev->data<<"->-1"<<endl;
-    
+    Node* suc=NULL;
+    int key;
+    cin>>key;
+    solve(root,prev,suc,key);
+    cout<<prev->data<<" "<<suc->data<<endl;
     return 0;
 }
