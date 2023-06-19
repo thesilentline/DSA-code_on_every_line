@@ -53,81 +53,55 @@ Node* insertNode(Node* root, int value)
     return root;
 }
 
-void inorderTraversal(Node* root) 
+void inorderTraversal(Node* root,vector<int> &v) 
 {
     if (root == NULL) 
         return;
     
-    inorderTraversal(root->left);
+    inorderTraversal(root->left,v);
     cout << root->data << " ";
-    inorderTraversal(root->right);
+    v.push_back(root->data);
+    inorderTraversal(root->right,v);
 }
 
-Node* successor(Node* root)
+Node* balanced(int b, int e,vector<int> &v)
 {
-    Node* temp= root->right;
-    while(temp->left)
-    {
-        temp=temp->left;
-    }
-    return temp;
-}
-
-Node* deletenode(Node* root, int key)
-{
-    if(root==NULL)
+    if(b>e)
     return NULL;
-    if(key>root->data)
-    {
-        root->right = deletenode(root->right,key);
-    }
-    else if(key<root->data)
-    {
-        root->left= deletenode(root->left,key);
-    }
-    else
-    {
-        if(!root->left)
-        {
-            return root->right;
-        }
 
-        else if(!root->right)
-        {
-            return root->left;
-        }
-        else
-        {
-            Node* succ= successor(root);
-            swap(root->data,succ->data);
-            root->right= deletenode(root->right,key);
-        }
-    }
+    int mid=(b+e)/2;
+    Node* root= new Node(v[mid]);
+
+    root->right=balanced(mid+1,e,v);
+    root->left=balanced(b,mid-1,v);
     return root;
 
-
 }
+
 int main() 
 {
-    Node* root = NULL;
-    int n;
-    cin>>n;
-    for(int i=0;i<n;i++)
-    {
-        int k=0;
-        cin>>k;
-        root= insertNode(root,k);
-    }
-    
-    inorderTraversal(root);
-    cout<<endl;
-    int k;
-    cin>>k;
-    root= deletenode(root,k);
-    inorderTraversal(root);
-    cout<<endl;
+    Node* root1 = new Node(100);
+    root1->left = new Node(50);
+    root1->right = new Node(300);
+    root1->left->left = new Node(20);
+    root1->left->right = new Node(70);
 
+    Node* root2 = new Node(80);
+    root2->left = new Node(40);
+    root2->right = new Node(120);
 
+    vector<int> v;
+    inorderTraversal(root1,v);
+    cout<<endl;
+    inorderTraversal(root2,v);
+    cout<<endl;
+    sort(v.begin(),v.end());
+
+    Node* root= balanced(0,v.size()-1,v);
+    inorderTraversal(root,v);
+
+    cout<<endl;
+    cout<<root->data<<endl;
     
     return 0;
 }

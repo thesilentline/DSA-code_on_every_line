@@ -63,18 +63,16 @@ void inorderTraversal(Node* root)
     inorderTraversal(root->right);
 }
 
-Node* deletenode(Node* root, int k)
-{
-    if(root==NULL)
-    return root;
-}
+
 
 int main() 
 {
-    Node* root = NULL;
     int n;
     cin>>n;
-    for(int i=0;i<n;i++)
+    int a;
+    cin>>a;
+    Node* root = new Node(a);
+    for(int i=1;i<n;i++)
     {
         int k=0;
         cin>>k;
@@ -83,6 +81,7 @@ int main()
     
     inorderTraversal(root);
     cout<<endl;
+    cout<<root->data<<endl;
     
     return 0;
 }

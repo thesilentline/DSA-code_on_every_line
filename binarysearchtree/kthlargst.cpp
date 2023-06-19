@@ -63,50 +63,24 @@ void inorderTraversal(Node* root)
     inorderTraversal(root->right);
 }
 
-Node* successor(Node* root)
-{
-    Node* temp= root->right;
-    while(temp->left)
-    {
-        temp=temp->left;
-    }
-    return temp;
-}
-
-Node* deletenode(Node* root, int key)
+void kthlargest(Node* root,int &k,int &f)
 {
     if(root==NULL)
-    return NULL;
-    if(key>root->data)
-    {
-        root->right = deletenode(root->right,key);
-    }
-    else if(key<root->data)
-    {
-        root->left= deletenode(root->left,key);
-    }
-    else
-    {
-        if(!root->left)
-        {
-            return root->right;
-        }
+    return;
 
-        else if(!root->right)
-        {
-            return root->left;
-        }
-        else
-        {
-            Node* succ= successor(root);
-            swap(root->data,succ->data);
-            root->right= deletenode(root->right,key);
-        }
+    kthlargest(root->right,k,f);
+    if(k==1 and f==1)
+    {
+        cout<<root->data<<endl;
+        f=0;
+        return;
     }
-    return root;
-
+    k--;
+    kthlargest(root->left,k,f);
+    return;
 
 }
+
 int main() 
 {
     Node* root = NULL;
@@ -121,13 +95,9 @@ int main()
     
     inorderTraversal(root);
     cout<<endl;
-    int k;
-    cin>>k;
-    root= deletenode(root,k);
-    inorderTraversal(root);
-    cout<<endl;
-
-
+    int k=2;
+    int f=1;
+    kthlargest(root,k,f);
     
     return 0;
 }
