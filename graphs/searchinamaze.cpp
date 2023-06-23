@@ -48,7 +48,7 @@ public:
         }
     }
 
-    void dfs(int i, int j, vector<vector<int>> &m, int n, vector<vector<int>> visit, vector<vector<int>> &ans)
+    void dfs(int i, int j,string s, vector<vector<int>> &m, int n, vector<vector<int>> visit,vector<string> &ans)
     {
         if(i<0 or j<0 or i>n-1 or j>n-1)
         return;
@@ -58,18 +58,13 @@ public:
 
         if(i==n-1 and j==n-1)
         {
-            for(auto t: ans)
-            {
-                for(auto q: ans[i])
-                cout<<q<<" ";
-                cout<<endl;
-            }
+            ans.push_back(s);
             return;
         }
+
         visit[i][j]=1;
-        ans[i][j+1]=1;
-        dfs(i,j+1,m,n,visit,ans);
-        dfs(i+1,j,m,n,visit,ans);
+        dfs(i,j+1,s+"R",m,n,visit,ans);
+        dfs(i+1,j,s+"D",m,n,visit,ans);
         visit[i][j]=0;
     }
 
@@ -90,8 +85,9 @@ int main()
     cout<<s<<endl;
     if(m[max-1][max-1]==0)
     cout<<s<<endl;
-    vector<vector<int>> ans(max,vector<int>(max));
-    g.dfs(0,0,m,max,visit,ans);
+    vector<string> ans;
+    g.dfs(0,0,s,m,max,visit,ans);
+    printvector(ans,ans.size());
 
     return 0;
 }
