@@ -49,66 +49,39 @@ public:
         }
     }
 
+    void solve(int src,vector<int> &visit,vector<int> &v)
+    {
+        visit[src]=1;
+        v.push_back(src);
+        for(auto i: adjList[src])
+        {
+            if(!visit[i])
+            {
+                solve(i,visit,v);
+            }
+        }
+    }
+
 };
 
 int main() 
 {
-    int n=31;
-    vector<int> v;
-    vector<vector<int>> visit(n,vector<int>(n));
-    queue<pair<int,int>> q;
-    int i,j,k,l;
-    cin>>i>>j>>k>>l;
-    q.push(make_pair(i,j));
-    while(!q.empty())
-    {
-        pair<int,int> curr= q.front();
-        int a=curr.first;
-        int b=curr.second;
-        q.pop();
-        if((a+1)>=0 and (a+1)<n and (b+2)>=0 and (b+2)<n and visit[a+1][b+2]==0)
-        {
-            visit[a+1][b+2]=visit[a][b]+1;
-            q.push(make_pair(a+1,b+2));
-        }
-        if((a-1)>=0 and (a-1)<n and (b+2)>=0 and (b+2)<n and visit[a-1][b+2]==0)
-        {
-            visit[a-1][b+2]=visit[a][b]+1;
-            q.push(make_pair(a-1,b+2));
-        }
-        if((a+2)>=0 and (a+2)<n and (b+1)>=0 and (b+1)<n and visit[a+2][b+1]==0)
-        {
-            visit[a+2][b+1]=visit[a][b]+1;
-            q.push(make_pair(a+2,b+1));
-        }
-        if((a+2)>=0 and (a+2)<n and (b-1)>=0 and (b-1)<n and visit[a+2][b-1]==0)
-        {
-            visit[a+2][b-1]=visit[a][b]+1;
-            q.push(make_pair(a+2,b-1));
-        }
-        if((a-2)>=0 and (a-2)<n and (b+1)>=0 and (b+1)<n and visit[a-2][b+1]==0)
-        {
-            visit[a-2][b+1]=visit[a][b]+1;
-            q.push(make_pair(a-2,b+1));
-        }
-        if((a-2)>=0 and (a-2)<n and (b-1)>=0 and (b-1)<n and visit[a-2][b-1]==0)
-        {
-            visit[a-2][b-1]=visit[a][b]+1;
-            q.push(make_pair(a-2,b-1));
-        }
-        if((a-1)>=0 and (a-1)<n and (b-2)>=0 and (b-2)<n and visit[a-1][b-2]==0)
-        {
-            visit[a-1][b-2]=visit[a][b]+1;
-            q.push(make_pair(a-1,b-2));
-        }
-        if((a+1)>=0 and (a+1)<n and (b-2)>=0 and (b-2)<n and visit[a+1][b-2]==0)
-        {
-            visit[a+1][b-2]=visit[a][b]+1;
-            q.push(make_pair(a+1,b-2));
-        }
+    Graph g(5);
 
-    }
-    cout<<visit[k][l]<<endl;
+    g.addEdge(0, 1);
+    g.addEdge(0, 2);
+    g.addEdge(1, 2);
+    g.addEdge(2, 0);
+    g.addEdge(2, 3);
+    g.addEdge(3, 3);
+
+    g.printGraph();
+
+    vector<int> v;
+    vector<int> visit(5,0);
+    g.solve(0,visit,v);
+
+    printvector(v,v.size());
 
 
     return 0;
