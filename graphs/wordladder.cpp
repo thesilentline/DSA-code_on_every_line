@@ -10,7 +10,7 @@ using namespace std;
 #define plong                   pair<long long,long long>
 #define vlong                   vector <long long>
 #define vint                    vector <int>
-#define endl                    "\n"
+#define endl                    "\n" 
 #define pb                      push_back
 #define mp                      make_pair
 #define for0(i,n)               for(int i=0;i<n;i++)
