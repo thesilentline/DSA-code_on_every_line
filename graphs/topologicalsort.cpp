@@ -1,6 +1,7 @@
 //~ author      : DSB
 #include <iostream>
 #include <vector>
+#include <queue>
 using namespace std;
 
 #define ll                      long long
@@ -32,7 +33,6 @@ public:
     void addEdge(int vertice1, int vertice2) 
     {
         adjList[vertice1].push_back(vertice2);
-        adjList[vertice2].push_back(vertice1);
     }
 
     void printGraph() 
@@ -48,44 +48,62 @@ public:
         }
     }
 
-    bool solve(int src, int par, vector<int> &visit)
+    vector<int> toposort(int n)
     {
-        visit[src]=1;
-        for(int i: adjList[src])
+        vector<int> in(n,0);
+        vector<int> ans;
+        queue<int> q;
+
+        for(int i=0;i<n;i++)
         {
-            if(!visit[i])
+            for(auto j: adjList[i])
             {
-                bool c= solve(i,src,visit);
-                if(c) return true;
+                in[j]++;
             }
-            else if(i==par) return true;
         }
-        return false;
+
+        for(int i=0;i<n;i++)
+        {
+            if(in[i]==0)
+            q.push(i);
+        }
+
+        while(!q.empty())
+        {
+            int front= q.front();
+            q.pop();
+            ans.push_back(front);
+
+            for(auto i: adjList[front])
+            {
+                in[i]--;
+                if(in[i]==0)
+                q.push(i);
+            }
+        }
+
+        return ans;
+
     }
 
 };
 
 int main() 
 {
-    Graph g2(3);
-    g2.addEdge(0, 1);
-    g2.addEdge(1, 2);
+    int n=6;
+    Graph g(6);
+    g.addEdge(5, 2);
+    g.addEdge(5, 0);
+    g.addEdge(4, 0);
+    g.addEdge(4, 1);
+    g.addEdge(2, 3);
+    g.addEdge(3, 1);
 
-    g2.printGraph();
+    g.printGraph();
 
-    vector<int> visit(3,0);
-    for(int i=0;i<visit.size();i++)
-    {
-        if(!visit[i])
-        {
-            bool c= g2.solve(i,-1,visit);
-            if(c==true)
-            {
-                cout<<"YES"<<endl;
-                return 0;
-            }
-        }
-    }
-    cout<<"NO"<<endl;
+    vector<int> ans;
+    ans= g.toposort(n);
+    printvector(ans,ans.size());
+
     return 0;
 }

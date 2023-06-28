@@ -32,7 +32,6 @@ public:
     void addEdge(int vertice1, int vertice2) 
     {
         adjList[vertice1].push_back(vertice2);
-        adjList[vertice2].push_back(vertice1);
     }
 
     void printGraph() 
@@ -48,18 +47,22 @@ public:
         }
     }
 
-    bool solve(int src, int par, vector<int> &visit)
+    bool solve(int src,vector<int> &visit, vector<int> &order)
     {
         visit[src]=1;
-        for(int i: adjList[src])
+        order[src]=1;
+        for(auto i: adjList[src])
         {
             if(!visit[i])
             {
-                bool c= solve(i,src,visit);
-                if(c) return true;
+                bool c= solve(i, visit, order);
+                if(c==true)
+                return true;
             }
-            else if(i==par) return true;
+            else if(order[i])
+            return true;
         }
+        order[src]=0;
         return false;
     }
 
@@ -67,25 +70,26 @@ public:
 
 int main() 
 {
-    Graph g2(3);
-    g2.addEdge(0, 1);
-    g2.addEdge(1, 2);
+    int n;
+    cin>>n;
+    Graph graph(n);
 
-    g2.printGraph();
-
-    vector<int> visit(3,0);
-    for(int i=0;i<visit.size();i++)
+    int m;
+    cin>>m;
+    for(int i=0;i<m;i++)
     {
-        if(!visit[i])
-        {
-            bool c= g2.solve(i,-1,visit);
-            if(c==true)
-            {
-                cout<<"YES"<<endl;
-                return 0;
-            }
-        }
+        int a,b;
+        cin>>a>>b;
+        graph.addEdge(b,a);
     }
-    cout<<"NO"<<endl;
+
+    graph.printGraph();
+
+    vector<int> visit(n,0);
+    vector<int> order(n,0);
+    if(graph.solve(0,visit,order)) cout<<"NO"<<endl;
+    else cout<<"YES"<<endl;
+
+
     return 0;
 }

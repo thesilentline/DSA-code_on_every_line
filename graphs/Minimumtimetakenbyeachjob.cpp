@@ -1,6 +1,7 @@
 //~ author      : DSB
 #include <iostream>
 #include <vector>
+#include<queue>
 using namespace std;
 
 #define ll                      long long
@@ -11,7 +12,7 @@ using namespace std;
 #define endl                    "\n"
 #define pb                      push_back
 #define mp                      make_pair
-#define for0(i,n)               for(int i=0;i<n;i++)
+#define for0(i,n)               for(int i=1;i<n;i++)
 #define for1(i,n)               for(int i=1;i<=n;i++)
 template <class t>              void printvector(vector<t>& v, ll n) {for0(i,n) {cout<<v[i]<<" ";} cout<<endl;}
 //-----------------------------------------------------------------------------------------------------------
@@ -32,7 +33,6 @@ public:
     void addEdge(int vertice1, int vertice2) 
     {
         adjList[vertice1].push_back(vertice2);
-        adjList[vertice2].push_back(vertice1);
     }
 
     void printGraph() 
@@ -48,44 +48,77 @@ public:
         }
     }
 
-    bool solve(int src, int par, vector<int> &visit)
+    vector<int> mintime(int n)
     {
-        visit[src]=1;
-        for(int i: adjList[src])
+        vector<int> indegree(n,0);
+        vector<int> time(n,0);
+        queue<int> q;
+
+        for(int i=0;i<n;i++)
         {
-            if(!visit[i])
+            for(auto j: adjList[i])
             {
-                bool c= solve(i,src,visit);
-                if(c) return true;
+                indegree[j]++;
             }
-            else if(i==par) return true;
         }
-        return false;
+
+        for(int i=0;i<n;i++)
+        {
+            if(indegree[i]==0)
+            {
+                q.push(i);
+                time[i]=1;
+            }
+        }
+
+        while(!q.empty())
+        {
+            int front= q.front();
+            q.pop();
+            for(auto i: adjList[front])
+            {
+                indegree[i]--;
+                if(indegree[i]==0)
+                {
+                    time[i]= time[front]+1;
+                    q.push(i);
+
+                }
+            }
+        }
+
+        return time;
     }
 
 };
 
 int main() 
 {
-    Graph g2(3);
-    g2.addEdge(0, 1);
-    g2.addEdge(1, 2);
+    int n=11;
+    Graph graph(n);
 
-    g2.printGraph();
+    graph.addEdge(1, 3);
+    graph.addEdge(1, 4);
+    graph.addEdge(1, 5);
+    graph.addEdge(2, 3);
+    graph.addEdge(2, 8);
+    graph.addEdge(2, 9);
+    graph.addEdge(3, 6);
+    graph.addEdge(4, 6);
+    graph.addEdge(4, 8);
+    graph.addEdge(5, 8);
+    graph.addEdge(6, 7);
+    graph.addEdge(7, 8);
+    graph.addEdge(8, 10);
 
-    vector<int> visit(3,0);
-    for(int i=0;i<visit.size();i++)
-    {
-        if(!visit[i])
-        {
-            bool c= g2.solve(i,-1,visit);
-            if(c==true)
-            {
-                cout<<"YES"<<endl;
-                return 0;
-            }
-        }
-    }
-    cout<<"NO"<<endl;
+    graph.printGraph();
+
+    vector<int> time;
+    time= graph.mintime(n);
+
+    printvector(time, time.size());
+
+
+
     return 0;
 }
