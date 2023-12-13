@@ -16,32 +16,26 @@ using namespace std;
 #define for1(i,n)               for(int i=1;i<=n;i++)
 template <class t>              void printvector(vector<t>& v, ll n) {for0(i,n) {cout<<v[i]<<" ";} cout<<endl;}
 //-----------------------------------------------------------------------------------------------------------
-int dp[100][100][100];
-
-int solve(string a,string b,string c, int al,int bl,int cl)
+int dp[100];
+int solve(int n)
 {
-    if(al<0 or bl<0 or cl<0)
-    return 0;
+    if(n<=1)
+    return 1;
 
-    if(dp[al][bl][cl]!=-1)
-    return dp[al][bl][cl];
-
-    if(a[al]==b[bl] and b[bl]==c[cl])
-    return dp[al][bl][cl]=1+ solve(a,b,c,al-1,bl-1,cl-1);
-
-    else
-        return dp[al][bl][cl] = max(max(solve(a,b,c,al,bl,cl-1),
-                            solve(a,b,c,al,bl-1,cl)),solve(a,b,c,al-1,bl,cl));
+    if(dp[n]!=-1)
+    return dp[n];
+    int res=0;
+    for(int i=0;i<n;i++)
+    {
+        res+= solve(i)*solve(n-1-i);
+    }
+    return dp[n]=res;
 }
 
 int main()
 {
-    string a,b,c;
-    cin>>a>>b>>c;
-
+    int n;
+    cin>>n;
     memset(dp,-1,sizeof(dp));
-    int al=a.size();
-    int bl=b.size();
-    int cl=c.size();
-    cout<<solve(a,b,c,al,bl,cl)<<endl;;
+    cout<<solve(n)<<endl;
 }

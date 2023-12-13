@@ -35,7 +35,6 @@ int solve(int n,int k)
         same= prev;
     }
     return same+diff;
-
 }
 
 
